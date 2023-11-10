@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video upload website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Video Upload</h1>
+        <form id="uploadForm">
+            <label for="videoFile">Choose a video:</label>
+            <input type="file" id="videoFile" accept="video/*" required>
+            <button type="button" onclick="uploadVideo()">Upload</button>
+        </form>
+        <div id="videoPlayer"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
