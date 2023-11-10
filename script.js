@@ -1,3 +1,28 @@
+// Function to handle actions when the page is loaded
+window.onload = function () {
+    // Get the div element where the video player and video list will be displayed
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoList = document.getElementById('videoList');
+
+    // Retrieve existing video URLs from local storage or initialize an empty array
+    const storedVideos = JSON.parse(localStorage.getItem('videos')) || [];
+
+    // Display the list of videos
+    displayVideoList(storedVideos, videoList);
+
+    // Check if there are videos to display
+    if (storedVideos.length > 0) {
+        // Display the first video in the player
+        const firstVideoURL = storedVideos[0];
+        videoPlayer.innerHTML = `
+            <video width="100%" controls>
+                <source src="${firstVideoURL}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        `;
+    }
+};
+
 // Define a function called uploadVideo
 function uploadVideo() {
     // Get the input element for the video file
@@ -42,17 +67,36 @@ function uploadVideo() {
 
 // Function to display the list of videos
 function displayVideoList(videos, videoListContainer) {
-    // Create a list item for the last added video in the array
-    const lastIndex = videos.length - 1;
-    const listItem = document.createElement('li');
-    listItem.innerHTML = `
-        <span>Video ${lastIndex + 1}</span>
-        <video width="100%" controls>
-            <source src="${videos[lastIndex]}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    `;
+    // Clear the existing list
+    videoListContainer.innerHTML = '';
 
-    // Append the new list item to the existing list
-    videoListContainer.appendChild(listItem);
+    // Create a list item for each video in the array
+    videos.forEach((videoURL, index) => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <span>Video ${index + 1}</span>
+            <video width="100%" controls>
+                <source src="${videoURL}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <button onclick="deleteVideo(${index})">Delete</button>
+        `;
+        videoListContainer.appendChild(listItem);
+    });
+}
+
+// Function to delete a video from the list and local storage
+function deleteVideo(index) {
+    // Retrieve existing video URLs from local storage or initialize an empty array
+    const storedVideos = JSON.parse(localStorage.getItem('videos')) || [];
+
+    // Remove the video at the specified index
+    storedVideos.splice(index, 1);
+
+    // Store the updated array in local storage
+    localStorage.setItem('videos', JSON.stringify(storedVideos));
+
+    // Update the displayed list of videos
+    const videoList = document.getElementById('videoList');
+    displayVideoList(storedVideos, videoList);
 }
